@@ -4,18 +4,30 @@ import ReactDOM from 'react-dom'
 const Statistics = (props) => {
   if(props.allReviews === 0){
     return (
-      <div>
-        Please give feedback
-      </div>
+      <>
+       <tr><td>Please give feedback </td></tr>
+      </>
     )
   }
-return(
-    <div>
-      Average: {((props.good*1) + (props.neutral*0) + (props.bad*-1))/props.allReviews} <br/>
-      Positives: {props.good / props.allReviews}
-    </div>
+return(<>
+     <StatisticLine text="Average:" value={(((props.good*1) + (props.neutral*0) + (props.bad*-1))/props.allReviews).toFixed(2)}/>
+      <StatisticLine text="Positives:" value={((props.good / props.allReviews)*100).toFixed(1) + '%'} /></>
   )
 }
+
+const Button = ({onClick, text}) => (
+  <button onClick={onClick}>
+    {text}
+  </button>
+)
+
+const StatisticLine = ({value, text}) => (
+ <tr>
+   <td>{text}</td>
+   <td> </td>
+   <td>{value}</td>
+ </tr>
+)
 
 
 const App = () => {
@@ -44,19 +56,20 @@ const App = () => {
   return (
     <div>
       <h1>Give Feedback</h1>
-      <button onClick={handleGoodReview}>Ebin</button>
-      <button onClick={handleNeutralReview}>Neutral</button>
-      <button onClick={handleBadReview}>Bad</button>
-   
+      
+      <Button onClick={handleGoodReview} text='Ebin'/>
+      <Button onClick={handleNeutralReview} text='Neutral' />
+      <Button onClick={handleBadReview} text='Bad'/>
+
       <h1>Statistics</h1>
-      <p>
-      Good {good} <br/>
-      Neutral {neutral} <br/>
-      Bad {bad} <br/>
-      Total {allReviews} <br />
-      </p>
-     <Statistics allReviews={allReviews} good={good} neutral={neutral} bad={bad}/>
-    
+      <table><thead>
+      <StatisticLine text="Good" value={good} />
+      <StatisticLine text="Neutral" value={neutral} />
+      <StatisticLine text="Bad" value={bad} />
+      <StatisticLine text="Total" value={allReviews}/>
+  
+      <Statistics allReviews={allReviews} good={good} neutral={neutral} bad={bad}/>
+      </thead></table>
     </div>
   )
 }
